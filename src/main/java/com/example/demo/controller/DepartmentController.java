@@ -34,7 +34,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/all")
-    public Map<Integer, List<Employee>> findEmployees(){
+    public Map<Integer, List<Employee>> allFindEmployees(){
         return departmentService.allEmployeesFromDepartment();
     }
 }

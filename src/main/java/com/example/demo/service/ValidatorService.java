@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ValidatorService {
+
     public String validateFirstName(String firstName){
         if(!StringUtils.isAlpha(firstName)){
             throw new IncorrectFirstNameException();
@@ -17,10 +18,16 @@ public class ValidatorService {
         return StringUtils.capitalize(firstName.toLowerCase());
     }
 
-    public String validateLastName(String lastName){
-        if(!StringUtils.isAlpha(lastName)){
-            throw new IncorrectLastNameException();
+    public String validateLastName(String lastName) {
+        String[] lastNames = lastName.split(" - ");
+        for (int i = 0; i < lastNames.length; i++) {
+            String isLastName = lastNames[i];
+            if(!StringUtils.isAlpha(isLastName)){
+                throw new IncorrectLastNameException();
+            }
+            lastNames[i] = StringUtils.capitalize(isLastName.toLowerCase());
         }
-        return StringUtils.capitalize(lastName.toLowerCase());
+        return String.join(" - ",lastNames);
     }
+
 }

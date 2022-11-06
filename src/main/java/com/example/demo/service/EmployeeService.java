@@ -21,7 +21,7 @@ public class EmployeeService {
         this.validatorService = validatorService;
     }
 
-    public String getKey(String firstName, String lastName){
+    private String getKey(String firstName, String lastName){
         return firstName + " | " + lastName ;
     }
 
@@ -48,6 +48,7 @@ public class EmployeeService {
         }
         return employees.remove(key);
     }
+
     public Employee find(String firstName, String lastName) {
     String key = getKey(firstName, lastName);
     if(!employees.containsKey(key)){

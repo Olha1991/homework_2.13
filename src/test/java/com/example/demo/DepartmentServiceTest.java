@@ -36,12 +36,12 @@ public class DepartmentServiceTest {
     @BeforeEach
     public void beforeEach(){
         List<Employee> employees = List.of(
-                new Employee("Yan", "Romanuk", 3000, 3),
-                new Employee("Larisa","Matvienko", 1000, 2),
-                new Employee("Egor","Tarasov", 4000, 3),
+
                 new Employee("Olga","Shevchenko", 2000, 1),
+                new Employee("Yana","Prokopenko", 4000, 1),
                 new Employee("Roman","Pechkin", 3000, 2),
-                new Employee("Yana","Prokopenko", 4000, 1)
+                new Employee("Larisa","Matvienko", 1000, 2),
+                new Employee("Egor","Tarasov", 4500, 2)
         );
         when(employeeService.getAll()).thenReturn(employees);
     }
@@ -55,7 +55,7 @@ public class DepartmentServiceTest {
     @Test
     public void employeeMaxSalaryNegativeTest(){
         assertThatExceptionOfType(EmployeeNotFoundException.class)
-                .isThrownBy(() -> departmentService.getMaxSalary(4));
+                .isThrownBy(() -> departmentService.getMaxSalary(3));
     }
 
     @ParameterizedTest
@@ -67,7 +67,7 @@ public class DepartmentServiceTest {
     @Test
     public void employeeMinSalaryNegativeTest(){
         assertThatExceptionOfType(EmployeeNotFoundException.class)
-                .isThrownBy(() -> departmentService.getMinSalary(4));
+                .isThrownBy(() -> departmentService.getMinSalary(3));
     }
 
     @ParameterizedTest
@@ -82,40 +82,34 @@ public class DepartmentServiceTest {
                 Map.of(
                         1, List.of(new Employee("Olga","Shevchenko", 2000, 1),
                                 new Employee("Yana","Prokopenko", 4000, 1)),
-                        2, List.of(new Employee("Larisa","Matvienko", 1000, 2),
-                                new Employee("Roman","Pechkin", 3000, 2)),
-                        3, List.of(new Employee("Egor","Tarasov", 4000, 3),
-                                new Employee("Yan","Romanuk", 3000, 3))
-
-
+                        2, List.of(new Employee("Roman","Pechkin", 3000, 2),
+                                new Employee("Larisa","Matvienko", 1000, 2),
+                                new Employee("Egor","Tarasov", 4500, 2))
                 )
         );
     }
     public static Stream<Arguments> employeeMaxSalaryParams(){
         return Stream.of(
                 Arguments.of(1,  new Employee("Yana","Prokopenko", 4000, 1)),
-                Arguments.of(2, new Employee("Roman","Pechkin", 3000, 2)),
-                Arguments.of(3, new Employee("Egor","Tarasov", 4000, 3))
+                Arguments.of(2,new Employee("Egor","Tarasov", 4500, 2))
         );
     }
 
     public static Stream<Arguments> employeeMinSalaryParams(){
         return Stream.of(
                 Arguments.of(1, new Employee("Olga","Shevchenko", 2000, 1)),
-                Arguments.of(2, new Employee("Larisa","Matvienko", 1000, 2)),
-                Arguments.of(3, new Employee("Yan", "Romanuk", 3000, 3))
+                Arguments.of(2, new Employee("Larisa","Matvienko", 1000, 2))
         );
     }
 
     public static Stream<Arguments> employeesFromDepartmentParams() {
         return Stream.of(
-                Arguments.of(1, List.of(new Employee("Olga", "Shevchenko", 2000, 1),
-                        new Employee("Yana", "Prokopenko", 4000, 1))),
-                Arguments.of(2, List.of(new Employee("Larisa", "Matvienko", 1000, 2),
-                        new Employee("Roman", "Pechkin", 3000, 2))),
-                Arguments.of(3, List.of(new Employee("Egor", "Tarasov", 4000, 3),
-                        new Employee("Yan", "Romanuk", 3000, 3))),
-                Arguments.of(4, Collections.emptyList())
+                Arguments.of(1, List.of(new Employee("Olga","Shevchenko", 2000, 1),
+                        new Employee("Yana","Prokopenko", 4000, 1))),
+                Arguments.of(2, List.of(new Employee("Roman","Pechkin", 3000, 2),
+                        new Employee("Larisa","Matvienko", 1000, 2),
+                        new Employee("Egor","Tarasov", 4500, 2))),
+                Arguments.of(3, Collections.emptyList())
         );
     }
 

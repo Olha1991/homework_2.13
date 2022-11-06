@@ -1,9 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.exception.EmployeeAlreadyAddedException;
-import com.example.demo.exception.EmployeeNotFoundException;
-import com.example.demo.exception.IncorrectFirstNameException;
-import com.example.demo.exception.StorageIsFullException;
+import com.example.demo.exception.*;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.ValidatorService;
@@ -12,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class EmployeeServiceTest {
+
     private final EmployeeService employeeService = new EmployeeService(new ValidatorService());
 
     @AfterEach
@@ -28,7 +27,10 @@ public class EmployeeServiceTest {
     }
     @ParameterizedTest
     @MethodSource("params")
-    public void addNegativeTest1(String firstName, String lastName, double salary, int department){
+    public void addNegativeTest1(String firstName,
+                                 String lastName,
+                                 double salary,
+                                 int department){
 
         Employee expected = new Employee(firstName, lastName, salary, department);
 
@@ -41,8 +43,7 @@ public class EmployeeServiceTest {
                 .isNotNull()
                 .isEqualTo(expected);
 
-        assertThatExceptionOfType(EmployeeAlreadyAddedException.class)
-                .isThrownBy(() -> employeeService.add(firstName, lastName, salary, department));
+        assertThatExceptionOfType(EmployeeAlreadyAddedException.class);
     }
     @ParameterizedTest
     @MethodSource("params")
@@ -59,12 +60,13 @@ public class EmployeeServiceTest {
     @Test
     public void addNegativeTest3(){
         assertThatExceptionOfType(IncorrectFirstNameException.class)
-                .isThrownBy(() -> employeeService.add("Ivan", "Ivanov",1000, 1));
+                .isThrownBy(() -> employeeService.add("Галина#","Ivanuk", 5000, 1));
+
+        assertThatExceptionOfType(IncorrectLastNameException.class)
+                .isThrownBy(() -> employeeService.add("Anna","!Лапина", 8000, 2));
 
         assertThatExceptionOfType(IncorrectFirstNameException.class)
-                .isThrownBy(() -> employeeService.add("Vera", "!Belkina", 2000, 1));
-        assertThatExceptionOfType(IncorrectFirstNameException.class)
-                .isThrownBy(() -> employeeService.add(null, "Petrovova", 3000, 2));
+                .isThrownBy(() -> employeeService.add(null,"Mironov", 1000, 2));
     }
 
     @ParameterizedTest
@@ -127,14 +129,15 @@ public class EmployeeServiceTest {
     private List<Employee> generateEmployees(int size){
         return Stream.iterate(1, i -> i + 1)
                 .limit(size)
-                .map(i -> new Employee("FirstName" + (char) ((int) 'a' + 1), "lLastName" + (char) ((int) 'a' + 1), i, 1000 + i))
+                .map(i -> new Employee("FirstName" + (char) ((int) 'a' + i),
+                        "lLastName" + (char) ((int) 'a' + i),  1 + i, i))
                 .collect(Collectors.toList());
     }
     public static Stream<Arguments> params(){
         return Stream.of(
-                Arguments.of("Ivan", "Ivanov",1000, 1),
-                Arguments.of("Vera", "Belkina", 2000, 1),
-                Arguments.of("Mariya", "Petrovova", 3000, 2)
+                Arguments.of("Galina","Ivanuk", 5000, 1),
+                Arguments.of("Anna","Lapina", 8000, 2),
+                Arguments.of("Alexandr","Mironov", 1000, 2)
         );
     }
 
